@@ -37,6 +37,17 @@ my $dt = Database::DumpTruck->new({
 # Create a user agent object.
 my $ua = LWP::UserAgent->new;
 
+# Get id.
+my $id = 0;
+my $ret_ar = eval {
+	$dt->execute('SELECT MAX(id) FROM data');
+};
+if (! $EVAL_ERROR && @{$ret_ar} && exists $ret_ar->[0]->{'max(id)'}
+	&& defined $ret_ar->[0]->{'max(id)'}) {
+
+	$id = $ret_ar->[0]->{'max(id)'};
+}
+
 # Get page.
 foreach my $type_of_doc (keys %{$TYPE_OF_DOC_HR}) {
 	print encode_utf8($TYPE_OF_DOC_HR->{$type_of_doc})."\n";
@@ -82,6 +93,7 @@ sub process_and_insert {
 	}
 	print encode_utf8("\t$name\n");
 	$dt->insert({
+		'Id' => ++$id,
 		'Typ_dokumentu' => $TYPE_OF_DOC_HR->{$type_of_doc},
 		'Jmeno' => $name,
 		'Link' => $link,
