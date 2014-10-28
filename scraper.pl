@@ -39,6 +39,7 @@ my $ua = LWP::UserAgent->new;
 
 # Get page.
 foreach my $type_of_doc (keys %{$TYPE_OF_DOC_HR}) {
+	print encode_utf8($TYPE_OF_DOC_HR->{$type_of_doc})."\n";
 	my $root = post($type_of_doc);
 	my @telo_table = $root->find_by_attribute('id', 'telo')->find_by_tag_name('table');
 	my $num = 0;
@@ -79,6 +80,7 @@ sub process_and_insert {
 	if ($active != 0) {
 		$active = 1;
 	}
+	print encode_utf8("\t$name\n");
 	$dt->insert({
 		'Typ_dokumentu' => $TYPE_OF_DOC_HR->{$type_of_doc},
 		'Jmeno' => $name,
