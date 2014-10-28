@@ -6,15 +6,11 @@ use strict;
 use warnings;
 
 # Modules.
-# XXX
-use Error::Pure qw(err);
 use Database::DumpTruck;
 use Encode qw(decode_utf8 encode_utf8);
 use English;
 use HTML::TreeBuilder;
 use LWP::UserAgent;
-use POSIX qw(strftime);
-use Time::Local;
 
 # Don't buffer.
 $OUTPUT_AUTOFLUSH = 1;
@@ -78,7 +74,7 @@ sub process_and_insert {
 			$active = 0;
 		}
 	} else {
-		err 'No supported.';
+		die 'No supported.';
 	}
 	if ($active != 0) {
 		$active = 1;
@@ -91,14 +87,7 @@ sub process_and_insert {
 		'Platnost_od' => $date_from,
 		'Platnost_do' => $date_to,
 		'Popis' => $desc,
-#		'MD5' => $md5,
 	});
-}
-
-# Process long table.
-sub process_long {
-	my @td = @_;
-	return ($name, $link, $desc, $date_from, $date_to, $active);
 }
 
 # Insert data for date.
